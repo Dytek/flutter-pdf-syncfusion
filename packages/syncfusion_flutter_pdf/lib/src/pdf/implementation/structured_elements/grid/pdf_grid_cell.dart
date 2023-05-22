@@ -1756,23 +1756,26 @@ class PdfGridCellHelper {
           Rect.fromLTWH(
               gridCentreX, gridCentreY, bounds.width / 2, bounds.height / 2));
     } else if (base._imagePosition == PdfGridImagePosition.fit) {
-      final double imageWidth = image!.physicalDimension.width;
-      final double imageHeight = image!.physicalDimension.height;
       double? x;
       double? y;
+      if (image!.orientationAngle.abs() == 90.0) {
+        final double imageWidth = image!.physicalDimension.height;
+        final double imageHeight = image.physicalDimension.width;
 
-      if (imageHeight > imageWidth) {
-        final double imageRatio = imageWidth / imageHeight;
+        final double imageRatio = bounds.height / imageHeight;
+        x = bounds.x + (bounds.width - imageWidth * imageRatio) / 2;
         y = bounds.y;
-        x = bounds.x;
-        graphics!.drawImage(image,
-            Rect.fromLTWH(x, y, bounds.width * imageRatio, bounds.height));
+        graphics!.drawImage(image!,
+            Rect.fromLTWH(x, y, imageWidth * imageRatio, bounds.height));
       } else {
-        final double imageRatio = imageHeight / imageWidth;
+        final double imageWidth = image!.physicalDimension.width;
+        final double imageHeight = image.physicalDimension.height;
+
+        final double imageRatio = bounds.width / imageWidth;
         x = bounds.x;
-        y = bounds.y;
-        graphics!.drawImage(image,
-            Rect.fromLTWH(x, y, bounds.width, bounds.height * imageRatio));
+        y = bounds.y + (bounds.height - imageHeight * imageRatio) / 2;
+        graphics!.drawImage(image!,
+            Rect.fromLTWH(x, y, bounds.width, imageHeight * imageRatio));
       }
     } else if (base._imagePosition == PdfGridImagePosition.tile) {
       final double cellLeft = bounds.x;
