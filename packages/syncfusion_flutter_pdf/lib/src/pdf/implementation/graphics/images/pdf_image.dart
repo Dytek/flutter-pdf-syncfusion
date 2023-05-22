@@ -127,6 +127,11 @@ abstract class PdfImage extends PdfShapeElement implements IPdfWrapper {
   /// ```
   Size get physicalDimension => Size(width.toDouble(), height.toDouble());
 
+  ///gets jpeg orientation angle of an image to use  in pdf grid cell
+  ///as pdf grid cell doesn't register image orientation
+  ///when getting width and height of an image
+  double get orientationAngle => _jpegOrientationAngle ?? 0;
+
   IPdfPrimitive? get _element => _imageStream;
   // ignore: unused_element
   set _element(IPdfPrimitive? value) {
