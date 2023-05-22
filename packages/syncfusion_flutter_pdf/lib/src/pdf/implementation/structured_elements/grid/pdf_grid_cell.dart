@@ -1757,19 +1757,22 @@ class PdfGridCellHelper {
               gridCentreX, gridCentreY, bounds.width / 2, bounds.height / 2));
     } else if (base._imagePosition == PdfGridImagePosition.fit) {
       final double imageWidth = image!.physicalDimension.width;
-      final double imageHeight = image.physicalDimension.height;
+      final double imageHeight = image!.physicalDimension.height;
       double? x;
       double? y;
+
       if (imageHeight > imageWidth) {
+        final double imageRatio = imageWidth / imageHeight;
         y = bounds.y;
-        x = bounds.x + bounds.width / 4;
-        graphics!.drawImage(
-            image, Rect.fromLTWH(x, y, bounds.width / 2, bounds.height));
-      } else {
         x = bounds.x;
-        y = bounds.y + (bounds.height / 4);
-        graphics!.drawImage(
-            image, Rect.fromLTWH(x, y, bounds.width, bounds.height / 2));
+        graphics!.drawImage(image,
+            Rect.fromLTWH(x, y, bounds.width * imageRatio, bounds.height));
+      } else {
+        final double imageRatio = imageHeight / imageWidth;
+        x = bounds.x;
+        y = bounds.y;
+        graphics!.drawImage(image,
+            Rect.fromLTWH(x, y, bounds.width, bounds.height * imageRatio));
       }
     } else if (base._imagePosition == PdfGridImagePosition.tile) {
       final double cellLeft = bounds.x;
